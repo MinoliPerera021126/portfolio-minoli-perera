@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minoli Perera | Aspiring AI Engineer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- 1. VARIABLES & THEME --- */
+        :root {
+            --bg-main: #0b1120;       
+            --bg-secondary: #1e293b;  
+            --accent: #22d3ee;        
+            --accent-glow: rgba(34, 211, 238, 0.3);
+            --accent-dim: #0ea5e9;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- 2. GLOBAL RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        ul { list-style: none; }
+
+        /* --- 3. ANIMATED BACKGROUND --- */
+        .bg-shapes {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            overflow: hidden; pointer-events: none;
+        }
+        .shape {
+            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15;
+            animation: float 20s infinite alternate;
+        }
+        .s1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--accent); }
+        .s2 { bottom: -10%; right: -10%; width: 40vw; height: 40vw; background: #6366f1; animation-delay: -5s; }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(50px, 50px) rotate(10deg); }
+        }
+
+        /* --- 4. NAVIGATION --- */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            padding: 1.5rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(11, 17, 32, 0.85); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; }
+        .logo span { color: var(--accent); }
+        .nav-list { display: flex; gap: 2.5rem; }
+        .nav-link { font-size: 0.95rem; color: var(--text-muted); font-weight: 500; position: relative; }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: -5px; left: 0; background: var(--accent); transition: 0.3s;
+        }
+        .nav-link:hover { color: var(--accent); }
+        .nav-link:hover::after { width: 100%; }
+        .mobile-toggle { display: none; font-size: 1.5rem; cursor: pointer; }
+
+        /* --- 5. HERO SECTION --- */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: space-between;
+            padding: 8rem 10% 4rem;
+        }
+        .hero-content { flex: 1; max-width: 600px; }
+        .badge {
+            display: inline-block; padding: 0.5rem 1rem;
+            background: rgba(34, 211, 238, 0.1); color: var(--accent);
+            border-radius: 50px; font-size: 0.85rem; font-weight: 600;
+            margin-bottom: 1.5rem; border: 1px solid rgba(34, 211, 238, 0.2);
+        }
+        .hero h1 {
+            font-size: 4rem; line-height: 1.1; margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2.5rem; max-width: 90%;
+        }
+        .cta-group { display: flex; gap: 1rem; }
+        .btn {
+            padding: 1rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 0.5rem; transition: var(--transition);
+        }
+        .btn-primary { background: var(--accent); color: #0f172a; border: 1px solid var(--accent); }
+        .btn-primary:hover { background: var(--accent-dim); box-shadow: 0 0 20px var(--accent-glow); }
+        .btn-secondary { background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); }
+        .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* --- 6. TECH VISUAL --- */
+        .hero-visual {
+            flex: 1; display: flex; justify-content: center; align-items: center;
+            height: 400px; perspective: 1000px;
+        }
+        .cube-container {
+            width: 200px; height: 200px; transform-style: preserve-3d;
+            animation: rotateCube 15s infinite linear;
+        }
+        .cube-face {
+            position: absolute; width: 200px; height: 200px;
+            border: 2px solid var(--accent); background: rgba(34, 211, 238, 0.05);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.1);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; color: var(--accent);
+        }
+        .front { transform: translateZ(100px); }
+        .back { transform: rotateY(180deg) translateZ(100px); }
+        .right { transform: rotateY(90deg) translateZ(100px); }
+        .left { transform: rotateY(-90deg) translateZ(100px); }
+        .top { transform: rotateX(90deg) translateZ(100px); }
+        .bottom { transform: rotateX(-90deg) translateZ(100px); }
+        @keyframes rotateCube {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        /* --- 7. SECTIONS & SKILLS --- */
+        section { padding: 6rem 10%; }
+        .section-title { margin-bottom: 4rem; display: flex; align-items: center; gap: 1rem; }
+        .section-title h2 { font-size: 2rem; color: var(--text-main); }
+        .line { height: 1px; flex: 1; background: var(--bg-secondary); }
+
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .skill-card {
+            background: var(--bg-secondary); padding: 2rem; border-radius: 12px;
+            border: 1px solid var(--border); transition: var(--transition);
+        }
+        .skill-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .skill-icon { font-size: 2rem; color: var(--accent); margin-bottom: 1rem; }
+        .skill-list { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1rem; }
+        .skill-tag {
+            font-size: 0.8rem; background: rgba(255,255,255,0.05); 
+            padding: 0.4rem 0.8rem; border-radius: 4px; color: var(--text-muted);
+        }
+
+        /* --- 8. PROJECTS --- */
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .project-card {
+            background: var(--bg-secondary); border-radius: 12px; overflow: hidden;
+            border: 1px solid var(--border); transition: var(--transition);
+            display: flex; flex-direction: column;
+        }
+        .project-card:hover {
+            transform: translateY(-5px); border-color: var(--accent);
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+        .project-content { padding: 2rem; flex: 1; display: flex; flex-direction: column; }
+        .project-tech {
+            margin-top: auto; padding-top: 1.5rem; display: flex; gap: 1rem; font-size: 0.85rem; color: var(--accent);
+        }
+        .project-links { margin-top: 1.5rem; display: flex; gap: 1rem; }
+        .icon-link { color: var(--text-muted); font-size: 1.2rem; }
+        .icon-link:hover { color: var(--accent); }
+
+        /* --- 9. TIMELINE --- */
+        .timeline { border-left: 2px solid var(--bg-secondary); margin-left: 1rem; }
+        .timeline-item { position: relative; padding-left: 2.5rem; margin-bottom: 3rem; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -9px; top: 0;
+            width: 16px; height: 16px; border-radius: 50%;
+            background: var(--bg-main); border: 2px solid var(--accent);
+        }
+        .timeline-date {
+            font-size: 0.85rem; color: var(--accent); margin-bottom: 0.5rem; font-family: 'Space Grotesk', sans-serif;
+        }
+        .timeline-title { font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text-main); }
+        .timeline-subtitle { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1rem; font-style: italic; }
+
+        /* spacing utility for small stacked items */
+        .pt-2 { margin-top: 1.5rem; }
+
+        /* --- 10. CONTACT --- */
+        .contact-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center; }
+        .contact-box {
+            padding: 2rem; border: 1px solid var(--border); border-radius: 12px;
+            background: var(--bg-secondary); transition: var(--transition);
+        }
+        .contact-box:hover { border-color: var(--accent); }
+        .contact-box i { font-size: 2rem; color: var(--accent); margin-bottom: 1rem; }
+        .contact-box a { display: block; margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem; }
+        .contact-box a:hover { color: var(--text-main); }
+
+        /* --- 11. BACK TO TOP BUTTON --- */
+        #backToTop {
+            position: fixed; bottom: 30px; right: 30px;
+            background: var(--accent); color: var(--bg-main);
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; cursor: pointer;
+            opacity: 0; pointer-events: none; transition: var(--transition);
+            z-index: 999; box-shadow: 0 4px 15px var(--accent-glow);
+        }
+        #backToTop.active { opacity: 1; pointer-events: all; transform: translateY(0); }
+        #backToTop:hover { transform: translateY(-5px); background: #fff; }
+
+        footer {
+            text-align: center; padding: 2rem; border-top: 1px solid var(--border);
+            color: var(--text-muted); font-size: 0.9rem; margin-top: 4rem;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .hero { flex-direction: column-reverse; padding-top: 8rem; text-align: center; }
+            .hero-content { margin-top: 3rem; }
+            .cta-group { justify-content: center; }
+            .cube-container { width: 150px; height: 150px; }
+            .cube-face { width: 150px; height: 150px; font-size: 2rem; }
+            .mobile-toggle { display: block; }
+            .nav-list {
+                position: fixed; top: 70px; right: -100%; width: 100%; height: 100vh;
+                background: var(--bg-main); flex-direction: column; align-items: center;
+                padding-top: 4rem; transition: 0.4s;
+            }
+            .nav-list.active { right: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-shapes">
+        <div class="shape s1"></div>
+        <div class="shape s2"></div>
+    </div>
+
+    <nav>
+        <div class="logo">MP<span>.</span></div>
+        <div class="mobile-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+        <ul class="nav-list">
+            <li><a href="#about" class="nav-link">About</a></li>
+            <li><a href="#skills" class="nav-link">Skills</a></li>
+            <li><a href="#projects" class="nav-link">Projects</a></li>
+            <li><a href="#timeline" class="nav-link">Journey</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero" id="about">
+        <div class="hero-content">
+            <div class="badge">Open to Work: Internship / Junior Dev</div>
+            <h1>Coding the Future, <br> One Pixel at a Time.</h1>
+            <p>
+                Hi, I'm <strong>Minoli Perera</strong>. An IT Undergraduate and Full Stack Developer.
+                I am an <strong>Aspiring AI Engineer</strong> passionate about building intelligent solutions and scalable web systems.
+            </p>
+            <div class="cta-group">
+                <a href="https://github.com/MinoliPerera021126/resume-minoli-perera/raw/main/assets/resume-minoli-perera.pdf" download class="btn btn-primary">
+                    <i class="fas fa-file-download"></i> Download CV
+                </a>
+                <a href="#contact" class="btn btn-secondary">
+                    Get in Touch
+                </a>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="cube-container">
+                <div class="cube-face front"><i class="fas fa-code"></i></div>
+                <div class="cube-face back"><i class="fas fa-robot"></i></div>
+                <div class="cube-face right"><i class="fab fa-python"></i></div>
+                <div class="cube-face left"><i class="fas fa-database"></i></div>
+                <div class="cube-face top"><i class="fas fa-brain"></i></div>
+                <div class="cube-face bottom"><i class="fas fa-layer-group"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <div class="section-title">
+            <h2>Technical Arsenal</h2>
+            <div class="line"></div>
+        </div>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-laptop-code"></i></div>
+                <h3>Languages</h3>
+                <div class="skill-list">
+                    <span class="skill-tag">C#</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">JavaScript</span>
+                    <span class="skill-tag">PHP</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-globe"></i></div>
+                <h3>Web Development</h3>
+                <div class="skill-list">
+                    <span class="skill-tag">ASP.NET</span>
+                    <span class="skill-tag">Django</span>
+                    <span class="skill-tag">HTML/CSS</span>
+                    <span class="skill-tag">Bootstrap</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon"><i class="fas fa-cubes"></i></div>
+                <h3>Tools & AI</h3>
+                <div class="skill-list">
+                    <span class="skill-tag">MySQL</span>
+                    <span class="skill-tag">Git</span>
+                    <span class="skill-tag">Azure AI</span>
+                    <span class="skill-tag">Unreal Engine</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="section-title">
+            <h2>Featured Projects</h2>
+            <div class="line"></div>
+        </div>
+        <div class="project-grid">
+            <div class="project-card">
+                <div class="project-content">
+                    <h3>Cleaning Managementt System</h3>
+                    <p style="color:var(--text-muted); margin: 10px 0;">A full-stack system developed for University maintenance, handling scheduling, task allocation, and reporting.</p>
+                    <div class="project-tech">
+                        <span>Django</span> <span>Python</span> <span>SQLite</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/Department-of-IT-FMSC-USJ/final-project-byte-mop.git" target="_blank" class="icon-link" title="Code"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-content">
+                    <h3>BlueCradle</h3>
+                    <p style="color:var(--text-muted); margin: 10px 0;">Infant Health Monitoring System. A comprehensive solution for child registration, vaccination tracking, and clinic scheduling.</p>
+                    <div class="project-tech">
+                        <span>ASP.NET</span> <span>C#</span> <span>MySQL</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/MinoliPerera021126/BlueCradle---Infant-Health-Monitoring-System.git" target="_blank" class="icon-link" title="Code"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-content">
+                    <h3>Taxi Charge Calculator</h3>
+                    <p style="color:var(--text-muted); margin: 10px 0;">Role-based application for fare calculation with specific access levels for Drivers, Passengers, and Admins.</p>
+                    <div class="project-tech">
+                        <span>Python</span> <span>OOP</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/MinoliPerera021126/ITC1171-Group-Assignment-CPM-24375-Group.git" target="_blank" class="icon-link" title="Code"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-content">
+                    <h3>3D Modelling Portfolio</h3>
+                    <p style="color:var(--text-muted); margin: 10px 0;">A curated collection of 3D characters, objects, and environment assets designed for game development.</p>
+                    <div class="project-tech">
+                        <span>Blender</span> <span>Unreal Engine</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/MinoliPerera021126/3d-models.git" target="_blank" class="icon-link" title="Code"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="timeline">
+        <div class="section-title">
+            <h2>My Journey</h2>
+            <div class="line"></div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 4rem;">
+            
+            <div>
+                <h3 style="margin-bottom: 2rem; color: var(--accent);">Education & Certifications</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023 - Present</div>
+                        <h4 class="timeline-title">BSc (Hons) in Business Info Systems</h4>
+                        <div class="timeline-subtitle">University of Sri Jayewardenepura</div>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Focus on Software Engineering & Info Systems.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2026 (Completed)</div>
+                        <h4 class="timeline-title">Microsoft Certified: Azure AI Fundamentals</h4>
+                        <div class="timeline-subtitle">Microsoft (AI-900)</div>
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Foundational knowledge of ML and AI workloads on Azure.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2022 - 2023</div>
+                        <h4 class="timeline-title">Diploma in IT</h4>
+                        <div class="timeline-subtitle">University of Colombo School of Computing (UCSC)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="margin-bottom: 2rem; color: var(--accent);">Leadership & Awards</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2024</div>
+                        <h4 class="timeline-title">Vice Chairperson</h4>
+                        <div class="timeline-subtitle">Insight Wave 1.0 - IEEE Student Branch USJ</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025</div>
+                        <h4 class="timeline-title">Marketing Manager</h4>
+                        <div class="timeline-subtitle">CyberSummit '25 - ISACA Student Group USJ</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">Achievements</div>
+                        <div>
+                            <h4 class="timeline-title">Semi Finalists - DHack'24</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Department of Information Technology - USJ</p>
+                        </div>
+
+                        <div class="pt-2">
+                            <h4 class="timeline-title">Most Popular Team - CyberZee'23</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">ISACA Student Group - UOK</p>
+                        </div>
+
+                        <div class="pt-2">
+                            <h4 class="timeline-title">1st Runner Up - Infinity 4.0</h4>
+                            <p style="font-size: 0.9rem; color: var(--text-muted);">Department of Commerce - USJ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="section-title">
+            <h2>Let's Connect</h2>
+            <div class="line"></div>
+        </div>
+        <div class="contact-container">
+            <div class="contact-box">
+                <i class="fas fa-envelope"></i>
+                <h3>Email Me</h3>
+                <a href="mailto:mnnetmi@gmail.com">mnnetmi@gmail.com</a>
+            </div>
+            <div class="contact-box">
+                <i class="fab fa-linkedin-in"></i>
+                <h3>LinkedIn</h3>
+                <a href="https://www.linkedin.com/in/hk-minoli-perera" target="_blank">Connect on LinkedIn</a>
+            </div>
+            <div class="contact-box">
+                <i class="fab fa-github"></i>
+                <h3>GitHub</h3>
+                <a href="https://github.com/MinoliPerera021126" target="_blank">MinoliPerera021126</a>
+            </div>
+            <div class="contact-box">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>Microsoft Learn</h3>
+                <a href="https://learn.microsoft.com/" target="_blank">View Profile</a>
+            </div>
+        </div>
+    </section>
+
+    <a href="#" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <footer>
+        <p>&copy; 2026 Minoli Perera. Designed & Developed with <i class="fas fa-heart" style="color:var(--accent);"></i></p>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            document.querySelector('.nav-list').classList.toggle('active');
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-list').classList.remove('active');
+            });
+        });
+
+        // Back to Top Button Logic
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTopBtn.classList.add('active');
+            } else {
+                backToTopBtn.classList.remove('active');
+            }
+        };
+
+        backToTopBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+    </script>
+</body>
+</html>
