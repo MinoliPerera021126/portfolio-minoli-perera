@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +20,11 @@
             --text-main: #f1f5f9;
             --text-muted: #94a3b8;
             --border: rgba(255, 255, 255, 0.05);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* Carousel Card Sizing Logic */
+            --card-width: min(60vw, 800px);
+            --card-half: calc(var(--card-width) / 2);
         }
 
         /* --- 2. GLOBAL RESET --- */
@@ -151,60 +156,99 @@
             padding: 0.4rem 0.8rem; border-radius: 4px; color: var(--text-muted);
         }
 
-        /* --- 8. PROJECTS CAROUSEL --- */
+        /* --- 8. FULL-BLEED STACK CAROUSEL --- */
+        #projects {
+            position: relative;
+            /* Allow the carousel to break out of the section padding */
+            padding-left: 0;
+            padding-right: 0;
+            overflow: hidden; 
+        }
+        
+        .section-title-wrapper {
+            /* Keep the title aligned with the rest of the site */
+            padding: 0 10%;
+        }
+
         .carousel-wrapper {
             position: relative;
-            max-width: 900px; /* Expands the card size */
-            margin: 0 auto;
-            padding: 0 1rem;
+            width: 100vw;
+            /* Full width breakout hack */
+            margin-left: calc(50% - 50vw);
+            padding: 2rem 0;
         }
+
         .carousel-container {
             display: flex;
+            align-items: stretch;
             gap: 2rem;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
-            padding: 1rem 0;
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            
+            /* Magic mathematical padding: perfectly centers the first and last cards */
+            padding: 2rem calc(50vw - var(--card-half)); 
+            
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
         .carousel-container::-webkit-scrollbar {
             display: none;
         }
+
         .project-card {
             background: var(--bg-secondary); border-radius: 12px; overflow: hidden;
             border: 1px solid var(--border); transition: var(--transition);
             display: flex; flex-direction: column;
-            min-width: 100%; /* Makes each card take up the full wrapper width */
+            
+            /* Stack Effect Base Styles */
+            flex: 0 0 var(--card-width);
             scroll-snap-align: center;
-            flex-shrink: 0;
+            opacity: 0.3;
+            filter: blur(4px);
+            transform: scale(0.85);
+            pointer-events: none; /* Disables hovering on blurred cards */
         }
-        .project-card:hover {
+        
+        /* Active (Centered) Card Styles */
+        .project-card.active {
+            opacity: 1;
+            filter: blur(0);
+            transform: scale(1);
+            pointer-events: auto;
             border-color: var(--accent);
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 35px -10px rgba(0,0,0,0.6);
         }
-        .project-content { padding: 3rem; flex: 1; display: flex; flex-direction: column; }
-        .project-content h3 { font-size: 1.8rem; margin-bottom: 1rem; }
-        .project-content p { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1.5rem; line-height: 1.8; }
+
+        .project-content { 
+            padding: 3rem; flex: 1; display: flex; flex-direction: column; 
+            min-width: 0;
+        }
+        .project-content h3 { font-size: 1.8rem; margin-bottom: 1rem; word-wrap: break-word; }
+        .project-content p { 
+            color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1.5rem; line-height: 1.8; 
+            word-wrap: break-word; white-space: normal;
+        }
         
         .project-tech {
             margin-top: auto; padding-top: 1.5rem; display: flex; gap: 1rem; font-size: 0.9rem; color: var(--accent); flex-wrap: wrap;
         }
         .project-links { margin-top: 2rem; display: flex; gap: 1.5rem; }
-        .icon-link { color: var(--text-muted); font-size: 1.5rem; }
+        .icon-link { color: var(--text-muted); font-size: 1.5rem; transition: var(--transition); }
         .icon-link:hover { color: var(--accent); transform: scale(1.1); }
 
         /* Carousel Nav Buttons */
         .carousel-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
-            background: var(--bg-secondary); color: var(--accent); 
-            border: 1px solid var(--accent); width: 50px; height: 50px; border-radius: 50%; 
+            background: rgba(11, 17, 32, 0.9); color: var(--accent); 
+            border: 1px solid var(--accent); width: 55px; height: 55px; border-radius: 50%; 
             cursor: pointer; display: flex; justify-content: center; align-items: center; 
             font-size: 1.2rem; z-index: 10; transition: var(--transition);
+            backdrop-filter: blur(5px);
         }
-        .carousel-btn:hover { background: var(--accent); color: var(--bg-main); box-shadow: 0 0 15px var(--accent-glow); }
-        .prev-btn { left: -25px; }
-        .next-btn { right: -25px; }
+        .carousel-btn:hover { background: var(--accent); color: var(--bg-main); box-shadow: 0 0 20px var(--accent-glow); }
+        .prev-btn { left: 5vw; }
+        .next-btn { right: 5vw; }
 
         /* --- 9. TIMELINE --- */
         .timeline { border-left: 2px solid var(--bg-secondary); margin-left: 1rem; }
@@ -253,6 +297,11 @@
 
         /* --- RESPONSIVE --- */
         @media (max-width: 900px) {
+            /* Override custom properties for mobile to make cards wider relative to screen */
+            :root {
+                --card-width: min(85vw, 400px);
+            }
+
             .hero { flex-direction: column-reverse; padding-top: 8rem; text-align: center; }
             .hero-content { margin-top: 3rem; }
             .cta-group { justify-content: center; }
@@ -265,9 +314,12 @@
                 padding-top: 4rem; transition: 0.4s;
             }
             .nav-list.active { right: 0; }
-            .prev-btn { left: -10px; }
-            .next-btn { right: -10px; }
+            
+            /* Responsive Carousel Updates */
             .project-content { padding: 2rem; }
+            .carousel-btn { transform: scale(0.8) translateY(-50%); }
+            .prev-btn { left: 2vw; }
+            .next-btn { right: 2vw; }
         }
     </style>
 </head>
@@ -377,9 +429,11 @@
     </section>
 
     <section id="projects">
-        <div class="section-title">
-            <h2>Projects & Portfolio</h2>
-            <div class="line"></div>
+        <div class="section-title-wrapper">
+            <div class="section-title">
+                <h2>Projects & Portfolio</h2>
+                <div class="line"></div>
+            </div>
         </div>
         
         <div class="carousel-wrapper">
@@ -639,20 +693,58 @@
             });
         });
 
-        // Carousel Logic
+        // --- Stack/Blur Carousel Logic ---
         const carousel = document.getElementById('projectCarousel');
+        const cards = document.querySelectorAll('.project-card');
         const prevBtn = document.querySelector('.prev-btn');
         const nextBtn = document.querySelector('.next-btn');
 
+        // Intersection Observer to detect centered card
+        const observerOptions = {
+            root: carousel,
+            rootMargin: '0px',
+            threshold: 0.5 // Triggers only when the card is heavily centered 
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    cards.forEach(card => card.classList.remove('active'));
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        cards.forEach(card => observer.observe(card));
+
+        // Precision Math Scrolling Function
+        const scrollToCard = (targetCard) => {
+            // Find exactly how far to scroll to put the target card dead-center
+            const containerCenter = carousel.clientWidth / 2;
+            const cardCenter = targetCard.offsetLeft + (targetCard.offsetWidth / 2);
+            
+            carousel.scrollTo({
+                left: cardCenter - containerCenter,
+                behavior: 'smooth'
+            });
+        };
+
+        // Button Click Event Listeners
         nextBtn.addEventListener('click', () => {
-            carousel.scrollBy({ left: carousel.offsetWidth, behavior: 'smooth' });
+            const activeCard = document.querySelector('.project-card.active');
+            if (activeCard && activeCard.nextElementSibling) {
+                scrollToCard(activeCard.nextElementSibling);
+            }
         });
 
         prevBtn.addEventListener('click', () => {
-            carousel.scrollBy({ left: -carousel.offsetWidth, behavior: 'smooth' });
+            const activeCard = document.querySelector('.project-card.active');
+            if (activeCard && activeCard.previousElementSibling) {
+                scrollToCard(activeCard.previousElementSibling);
+            }
         });
 
-        // Back to Top Button Logic
+        // --- Back to Top Button Logic ---
         const backToTopBtn = document.getElementById('backToTop');
         
         window.onscroll = function() {
