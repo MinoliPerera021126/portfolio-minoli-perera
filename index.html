@@ -151,24 +151,60 @@
             padding: 0.4rem 0.8rem; border-radius: 4px; color: var(--text-muted);
         }
 
-        /* --- 8. PROJECTS --- */
-        .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        /* --- 8. PROJECTS CAROUSEL --- */
+        .carousel-wrapper {
+            position: relative;
+            max-width: 900px; /* Expands the card size */
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .carousel-container {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            padding: 1rem 0;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        .carousel-container::-webkit-scrollbar {
+            display: none;
+        }
         .project-card {
             background: var(--bg-secondary); border-radius: 12px; overflow: hidden;
             border: 1px solid var(--border); transition: var(--transition);
             display: flex; flex-direction: column;
+            min-width: 100%; /* Makes each card take up the full wrapper width */
+            scroll-snap-align: center;
+            flex-shrink: 0;
         }
         .project-card:hover {
-            transform: translateY(-5px); border-color: var(--accent);
+            border-color: var(--accent);
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
         }
-        .project-content { padding: 2rem; flex: 1; display: flex; flex-direction: column; }
+        .project-content { padding: 3rem; flex: 1; display: flex; flex-direction: column; }
+        .project-content h3 { font-size: 1.8rem; margin-bottom: 1rem; }
+        .project-content p { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1.5rem; line-height: 1.8; }
+        
         .project-tech {
-            margin-top: auto; padding-top: 1.5rem; display: flex; gap: 1rem; font-size: 0.85rem; color: var(--accent); flex-wrap: wrap;
+            margin-top: auto; padding-top: 1.5rem; display: flex; gap: 1rem; font-size: 0.9rem; color: var(--accent); flex-wrap: wrap;
         }
-        .project-links { margin-top: 1.5rem; display: flex; gap: 1rem; }
-        .icon-link { color: var(--text-muted); font-size: 1.2rem; }
-        .icon-link:hover { color: var(--accent); }
+        .project-links { margin-top: 2rem; display: flex; gap: 1.5rem; }
+        .icon-link { color: var(--text-muted); font-size: 1.5rem; }
+        .icon-link:hover { color: var(--accent); transform: scale(1.1); }
+
+        /* Carousel Nav Buttons */
+        .carousel-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: var(--bg-secondary); color: var(--accent); 
+            border: 1px solid var(--accent); width: 50px; height: 50px; border-radius: 50%; 
+            cursor: pointer; display: flex; justify-content: center; align-items: center; 
+            font-size: 1.2rem; z-index: 10; transition: var(--transition);
+        }
+        .carousel-btn:hover { background: var(--accent); color: var(--bg-main); box-shadow: 0 0 15px var(--accent-glow); }
+        .prev-btn { left: -25px; }
+        .next-btn { right: -25px; }
 
         /* --- 9. TIMELINE --- */
         .timeline { border-left: 2px solid var(--bg-secondary); margin-left: 1rem; }
@@ -229,6 +265,9 @@
                 padding-top: 4rem; transition: 0.4s;
             }
             .nav-list.active { right: 0; }
+            .prev-btn { left: -10px; }
+            .next-btn { right: -10px; }
+            .project-content { padding: 2rem; }
         }
     </style>
 </head>
@@ -342,134 +381,146 @@
             <h2>Projects & Portfolio</h2>
             <div class="line"></div>
         </div>
-        <div class="project-grid">
+        
+        <div class="carousel-wrapper">
+            <button class="carousel-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
             
-            <!-- ML/AI Projects (Most Relevant) -->
-            <div class="project-card">
-                <div class="project-content">
-                    <h3>PyTorch Flower Classification</h3>
-                    <p style="color:var(--text-muted); margin: 10px 0;">End-to-end deep learning pipeline for multi-class image classification using custom CNNs and ResNet-18 transfer learning.</p>
-                    <div class="project-tech">
-                        <span>PyTorch</span> <span>Python</span> <span>Computer Vision</span> <span>scikit-learn</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="#" target="_blank" class="icon-link" title="Code">
-                            <i class="fab fa-github"></i>
-                        </a>
+            <div class="carousel-container" id="projectCarousel">
+                
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>PyTorch Flower Classification</h3>
+                        <p>An end-to-end deep learning pipeline designed for multi-class image classification. Built entirely from scratch using PyTorch, it features custom Convolutional Neural Networks (CNNs) alongside highly accurate ResNet-18 transfer learning models. Includes comprehensive data augmentation to prevent overfitting and interactive Colab deployments for real-time visual inference.</p>
+                        <div class="project-tech">
+                            <span>PyTorch</span> <span>Python</span> <span>Computer Vision</span> <span>scikit-learn</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" target="_blank" class="icon-link" title="Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="project-card">
-                <div class="project-content">
-                    <h3>Car Price Prediction</h3>
-                    <p style="color:var(--text-muted); margin: 10px 0;">Regression ML model predicting automobile prices using feature engineering, hyperparameter optimization, and multiple algorithm comparisons with live demo.</p>
-                    <div class="project-tech">
-                        <span>Python</span> <span>scikit-learn</span> <span>TensorFlow</span> <span>Pandas</span> <span>Streamlit</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/MinoliPerera021126/car-price-prediction-ml-system" target="_blank" class="icon-link" title="Code">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="https://car-price-prediction-ml-system-minoliperera021126.streamlit.app/" target="_blank" class="icon-link" title="Live Demo">
-                            <i class="fas fa-link"></i>
-                        </a>
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>Car Price Prediction</h3>
+                        <p>A robust regression-based machine learning system built to predict automobile prices based on historical market data. It features rigorous exploratory data analysis, deep feature engineering, and hyperparameter optimization across multiple algorithms including Linear Regression, Random Forests, and Neural Networks. The final optimized model is accessible via an interactive Streamlit application.</p>
+                        <div class="project-tech">
+                            <span>Python</span> <span>scikit-learn</span> <span>TensorFlow</span> <span>Pandas</span> <span>Streamlit</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/MinoliPerera021126/car-price-prediction-ml-system" target="_blank" class="icon-link" title="Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://car-price-prediction-ml-system-minoliperera021126.streamlit.app/" target="_blank" class="icon-link" title="Live Demo">
+                                <i class="fas fa-link"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="project-card">
-                <div class="project-content">
-                    <h3>Fake News Detection (NLP)</h3>
-                    <p style="color:var(--text-muted); margin: 10px 0;">End-to-end NLP system with 6 ML models, 99%+ F1-Score, critical dataset bias analysis, and sub-5ms Flask API deployment.</p>
-                    <div class="project-tech">
-                        <span>NLP</span> <span>scikit-learn</span> <span>XGBoost</span> <span>TensorFlow</span> <span>Flask</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/MinoliPerera021126/fake-news-detection-ml-system" target="_blank" class="icon-link" title="Code">
-                            <i class="fab fa-github"></i>
-                        </a>
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>Fake News Detection (NLP)</h3>
+                        <p>An advanced Natural Language Processing system that evaluates six distinct machine learning algorithms to classify the authenticity of news articles. Achieved a 99%+ F1-Score while critically analyzing underlying dataset biases and shortcut learning. The optimal model is deployed via a highly efficient Flask API, achieving sub-5ms CPU inference time.</p>
+                        <div class="project-tech">
+                            <span>NLP</span> <span>scikit-learn</span> <span>XGBoost</span> <span>TensorFlow</span> <span>Flask</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/MinoliPerera021126/fake-news-detection-ml-system" target="_blank" class="icon-link" title="Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
+                
+                <!-- Project 4 -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>Loan Approval Prediction</h3>
+                        <p>A complete, production-ready binary classification system showcasing a full machine learning lifecycle. It handles complex missing values and categorical data via a structured ColumnTransformer preprocessing pipeline. Model deployment is handled by a fast REST API backend (FastAPI) paired seamlessly with an interactive frontend dashboard (Streamlit).</p>
+                        <div class="project-tech">
+                            <span>scikit-learn</span> <span>FastAPI</span> <span>Streamlit</span> <span>Python</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/MinoliPerera021126/loan-approval-ml-system" target="_blank" class="icon-link" title="Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>University Facility System</h3>
+                        <p>A comprehensive full-stack web application built with Django for institutional task management. It streamlines role-based workflows, automates staff scheduling, and provides administrators with a secure, real-time monitoring dashboard, entirely backed by a robust and relational MySQL database architecture.</p>
+                        <div class="project-tech">
+                            <span>Django</span> <span>Python</span> <span>MySQL</span> <span>Bootstrap</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Department-of-IT-FMSC-USJ/final-project-byte-mop" target="_blank" class="icon-link" title="Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>BlueCradle v2</h3>
+                        <p>A secure healthcare data management system explicitly focused on infant and child health monitoring. The platform features robust digital registration, automated vaccination scheduling, and role-based access control for medical officers and parents, ensuring data integrity and strict privacy handling throughout the application.</p>
+                        <div class="project-tech">
+                            <span>Django</span> <span>Python</span> <span>MySQL</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/MinoliPerera021126/bluecradle-infant-and-child-health-monitoring-system-v2" target="_blank" class="icon-link" title="Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 7 -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>Taxi Charge Calculator</h3>
+                        <p>A Python-based console application designed to demonstrate core Object-Oriented Programming (OOP) principles. It features role-based access control modules, allowing for precise fare calculations, itinerary management, and system overrides distinctly separated for Drivers, Passengers, and Administrators.</p>
+                        <div class="project-tech">
+                            <span>Python</span> <span>OOP</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/MinoliPerera021126/ITC1171-Group-Assignment-CPM-24375-Group.git" target="_blank" class="icon-link" title="Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 8 -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <h3>3D Modelling Portfolio</h3>
+                        <p>A diverse, creative collection of 3D characters, environmental objects, and structural assets. Meticulously sculpted, rigged, and textured using Blender, these models are deeply optimized for performance and direct integration into modern game engines like Unreal Engine, showcasing a strong eye for technical art.</p>
+                        <div class="project-tech">
+                            <span>Blender</span> <span>Unreal Engine</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/MinoliPerera021126/3d-models.git" target="_blank" class="icon-link" title="Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             
-            <div class="project-card">
-                <div class="project-content">
-                    <h3>Loan Approval Prediction</h3>
-                    <p style="color:var(--text-muted); margin: 10px 0;">Binary classification ML system with production-safe preprocessing, FastAPI backend, and Streamlit frontend for real-time inference.</p>
-                    <div class="project-tech">
-                        <span>scikit-learn</span> <span>FastAPI</span> <span>Streamlit</span> <span>Python</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/MinoliPerera021126/loan-approval-ml-system" target="_blank" class="icon-link" title="Code">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Full-Stack & Backend Projects -->
-            <div class="project-card">
-                <div class="project-content">
-                    <h3>University Facility System</h3>
-                    <p style="color:var(--text-muted); margin: 10px 0;">Full-stack Django web app for institutional task management with role-based workflows and administrative dashboard.</p>
-                    <div class="project-tech">
-                        <span>Django</span> <span>Python</span> <span>MySQL</span> <span>Bootstrap</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/Department-of-IT-FMSC-USJ/final-project-byte-mop" target="_blank" class="icon-link" title="Code">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-content">
-                    <h3>BlueCradle v2</h3>
-                    <p style="color:var(--text-muted); margin: 10px 0;">Healthcare data management system with child registration, vaccination tracking, and secure role-based access control.</p>
-                    <div class="project-tech">
-                        <span>Django</span> <span>Python</span> <span>MySQL</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/MinoliPerera021126/bluecradle-infant-and-child-health-monitoring-system-v2" target="_blank" class="icon-link" title="Code">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Other Projects -->
-            <div class="project-card">
-                <div class="project-content">
-                    <h3>Taxi Charge Calculator</h3>
-                    <p style="color:var(--text-muted); margin: 10px 0;">Role-based console application for fare calculation with specific access levels for Drivers, Passengers, and Admins.</p>
-                    <div class="project-tech">
-                        <span>Python</span> <span>OOP</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/MinoliPerera021126/ITC1171-Group-Assignment-CPM-24375-Group.git" target="_blank" class="icon-link" title="Code">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-content">
-                    <h3>3D Modelling Portfolio</h3>
-                    <p style="color:var(--text-muted); margin: 10px 0;">A curated collection of 3D characters, objects, and environment assets designed for game development.</p>
-                    <div class="project-tech">
-                        <span>Blender</span> <span>Unreal Engine</span>
-                    </div>
-                    <div class="project-links">
-                        <a href="https://github.com/MinoliPerera021126/3d-models.git" target="_blank" class="icon-link" title="Code">
-                            <i class="fab fa-github"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
+            <button class="carousel-btn next-btn"><i class="fas fa-chevron-right"></i></button>
         </div>
     </section>
 
@@ -588,6 +639,19 @@
             });
         });
 
+        // Carousel Logic
+        const carousel = document.getElementById('projectCarousel');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+
+        nextBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: carousel.offsetWidth, behavior: 'smooth' });
+        });
+
+        prevBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: -carousel.offsetWidth, behavior: 'smooth' });
+        });
+
         // Back to Top Button Logic
         const backToTopBtn = document.getElementById('backToTop');
         
@@ -605,5 +669,4 @@
         });
     </script>
 </body>
-
 </html>
