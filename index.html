@@ -164,7 +164,7 @@
         }
         .project-content { padding: 2rem; flex: 1; display: flex; flex-direction: column; }
         .project-tech {
-            margin-top: auto; padding-top: 1.5rem; display: flex; gap: 1rem; font-size: 0.85rem; color: var(--accent);
+            margin-top: auto; padding-top: 1.5rem; display: flex; gap: 1rem; font-size: 0.85rem; color: var(--accent); flex-wrap: wrap;
         }
         .project-links { margin-top: 1.5rem; display: flex; gap: 1rem; }
         .icon-link { color: var(--text-muted); font-size: 1.2rem; }
@@ -257,7 +257,7 @@
             <h1>Building Intelligent <br> Systems with ML</h1>
             <p>
                 Hi, I'm <strong>Minoli Perera</strong>. An AI/ML Engineer and Data Science enthusiast.
-                I specialize in machine learning pipelines, predictive models, and intelligent systems with production-ready deployments.
+                I specialize in machine learning pipelines, deep learning models, computer vision, and building intelligent systems with production-ready deployments.
             </p>
             <div class="cta-group">
                 <a href="#contact" class="btn btn-secondary">
@@ -271,7 +271,7 @@
                 <div class="cube-face front"><i class="fas fa-brain"></i></div>
                 <div class="cube-face back"><i class="fas fa-robot"></i></div>
                 <div class="cube-face right"><i class="fab fa-python"></i></div>
-                <div class="cube-face left"><i class="fas fa-chart-line"></i></div>
+                <div class="cube-face left"><i class="fas fa-eye"></i></div>
                 <div class="cube-face top"><i class="fas fa-database"></i></div>
                 <div class="cube-face bottom"><i class="fas fa-code"></i></div>
             </div>
@@ -288,12 +288,12 @@
                 <div class="skill-icon"><i class="fas fa-brain"></i></div>
                 <h3>Machine Learning</h3>
                 <div class="skill-list">
-                    <span class="skill-tag">Supervised Learning</span>
-                    <span class="skill-tag">Classification</span>
-                    <span class="skill-tag">Regression</span>
+                    <span class="skill-tag">Deep Learning</span>
+                    <span class="skill-tag">Computer Vision</span>
                     <span class="skill-tag">NLP</span>
+                    <span class="skill-tag">Supervised Learning</span>
+                    <span class="skill-tag">Classification & Regression</span>
                     <span class="skill-tag">Model Evaluation</span>
-                    <span class="skill-tag">Hyperparameter Tuning</span>
                 </div>
             </div>
             
@@ -302,10 +302,10 @@
                 <h3>Languages & Frameworks</h3>
                 <div class="skill-list">
                     <span class="skill-tag">Python</span>
-                    <span class="skill-tag">scikit-learn</span>
+                    <span class="skill-tag">PyTorch</span>
                     <span class="skill-tag">TensorFlow</span>
-                    <span class="skill-tag">Pandas</span>
-                    <span class="skill-tag">NumPy</span>
+                    <span class="skill-tag">scikit-learn</span>
+                    <span class="skill-tag">Pandas / NumPy</span>
                     <span class="skill-tag">C#</span>
                 </div>
             </div>
@@ -343,7 +343,23 @@
             <div class="line"></div>
         </div>
         <div class="project-grid">
+            
             <!-- ML/AI Projects (Most Relevant) -->
+            <div class="project-card">
+                <div class="project-content">
+                    <h3>PyTorch Flower Classification</h3>
+                    <p style="color:var(--text-muted); margin: 10px 0;">End-to-end deep learning pipeline for multi-class image classification using custom CNNs and ResNet-18 transfer learning.</p>
+                    <div class="project-tech">
+                        <span>PyTorch</span> <span>Python</span> <span>Computer Vision</span> <span>scikit-learn</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="#" target="_blank" class="icon-link" title="Code">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <div class="project-card">
                 <div class="project-content">
                     <h3>Car Price Prediction</h3>
@@ -453,6 +469,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </section>
 
